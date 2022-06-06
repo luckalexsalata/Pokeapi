@@ -1,0 +1,45 @@
+version: '3'
+
+services:
+#  db:
+#    image: sqlite3:latest
+#    environment:
+#      - SQLITE3_DB=db.sqlite3
+#    command: mongod
+
+  db:
+    image: postgres
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+
+#  users:
+#    build: ./
+#    command: python3 manage.py runserver 0.0.0.0:8080
+#    ports:
+#      - "8080:8080"
+#    volumes:
+#      - .:/users
+#    environment:
+#      - POSTGRES_NAME=postgres
+#      - POSTGRES_USER=postgres
+#      - POSTGRES_PASSWORD=postgres
+#    depends_on:
+#      - db
+
+  api:
+    build: ./
+    command: python3 manage.py runserver 0.0.0.0:8080
+    ports:
+      - "8080:8080"
+    volumes:
+      - .:/api
+    environment:
+      - POSTGRES_NAME=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    depends_on:
+      - db
